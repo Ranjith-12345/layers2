@@ -16,8 +16,8 @@ from torch import nn, Tensor
 
 class Transformer(nn.Module):
 
-    def __init__(self, d_model=512, nhead=8, num_encoder_layers=6,
-                 num_decoder_layers=6, dim_feedforward=2048, dropout=0.1,
+    def __init__(self, d_model=512, nhead=8, num_encoder_layers=8,
+                 num_decoder_layers=8, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False,
                  return_intermediate_dec=False):
         super().__init__()
@@ -141,15 +141,7 @@ class TransformerEncoderLayer(nn.Module):
 
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
-        self.conv1 = nn.Conv2d(in_ch, hidden_ch, kernel_size=3, stride=2, padding=1, bias=False)
-        self.norm3 = nn.LayerNorm(d_model)
-        self.dropout3 = nn.Dropout(dropout)
-        self.conv1 = nn.Conv2d(in_ch, hidden_ch, kernel_size=3, stride=2, padding=1, bias=False)
-        self.norm3 = nn.LayerNorm(d_model)
-        self.dropout3 = nn.Dropout(dropout)
-        self.conv1 = nn.Conv2d(in_ch, hidden_ch, kernel_size=3, stride=2, padding=1, bias=False)
-        self.norm3 = nn.LayerNorm(d_model)
-        self.dropout3 = nn.Dropout(dropout)
+        
 
     def with_pos_embed(self, tensor, pos: Optional[Tensor]):
         return tensor if pos is None else tensor + pos
