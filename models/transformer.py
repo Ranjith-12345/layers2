@@ -17,7 +17,7 @@ from torch import nn, Tensor
 class Transformer(nn.Module):
 
     def __init__(self, d_model=512, nhead=3, num_encoder_layers=3,
-                 num_decoder_layers=8, dim_feedforward=2048, dropout=0.1,
+                 num_decoder_layers=3, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False,
                  return_intermediate_dec=False):
         super().__init__()
