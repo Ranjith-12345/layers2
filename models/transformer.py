@@ -138,7 +138,7 @@ class TransformerEncoderLayer(nn.Module):
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
-
+        self.lstm = nn.LSTM(num_layers=3)
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
         
