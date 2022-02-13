@@ -125,7 +125,7 @@ class TransformerDecoder(nn.Module):
 
 class TransformerEncoderLayer(nn.Module):
 
-    def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
+     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False):
         super().__init__()
         self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout)
@@ -138,7 +138,7 @@ class TransformerEncoderLayer(nn.Module):
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
-        self.lstm = nn.LSTM(num_layers=3)
+
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
         
