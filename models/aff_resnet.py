@@ -256,7 +256,7 @@ def affresnet18(fuse_type='AFF',small_input=False, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('affresnet18', BasicBlock, [2, 2, 2, 2], fuse_type, **kwargs)
+    return _resnet('affresnet18', BasicBlock, [2, 2, 2, 2], fuse_type,small_input, **kwargs)
 
 
 def resnet34(fuse_type='DAF', **kwargs):
