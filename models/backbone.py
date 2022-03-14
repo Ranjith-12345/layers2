@@ -89,10 +89,12 @@ class Backbone(BackboneBase):
         backbone = resnet18(
             replace_stride_with_dilation=[False, False, dilation],
             norm_layer=FrozenBatchNorm2d)
-        num_channels = 512 if name in ('resnet18', 'resnet34') else 512
+        num_channels = 512
         super().__init__(backbone, train_backbone, num_channels, return_interm_layers)
 
 
+        
+        
 class Joiner(nn.Sequential):
     def __init__(self, backbone, position_embedding):
         super().__init__(backbone, position_embedding)
