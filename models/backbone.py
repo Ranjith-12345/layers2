@@ -89,7 +89,7 @@ class Backbone(BackboneBase):
         backbone = resnet18(
             replace_stride_with_dilation=[False, False, dilation],
             norm_layer=FrozenBatchNorm2d)
-        num_channels = 512
+        num_channels = 2048
         super().__init__(backbone, train_backbone, num_channels, return_interm_layers)
 
 
