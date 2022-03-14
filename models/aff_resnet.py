@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from fusion import AFF, iAFF, DAF
+from .fusion import AFF, iAFF, DAF
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
