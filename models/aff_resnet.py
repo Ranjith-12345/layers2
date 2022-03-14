@@ -240,7 +240,7 @@ def _resnet(arch, block, layers, fuse_type, small_input, **kwargs):
     return model
 
 
-def resnet18(fuse_type='DAF', **kwargs):
+def resnet18(fuse_type='AFF', **kwargs):
     r"""ResNet-18 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
