@@ -14,7 +14,7 @@ from typing import Dict, List
 from util.misc import NestedTensor, is_main_process
 
 from .position_encoding import build_position_encoding
-from .aff_resnet import res2net50_26w_4s
+from .aff_resnet.py import affresnet18
 
 
 class FrozenBatchNorm2d(torch.nn.Module):
