@@ -88,7 +88,7 @@ class Backbone(BackboneBase):
                  dilation: bool):
         backbone = affresnet18(
             replace_stride_with_dilation=[False, False, dilation],
-            pretrained=is_main_process(), norm_layer=FrozenBatchNorm2d)
+            norm_layer=FrozenBatchNorm2d)
         num_channels = 512 if name in ('resnet18', 'resnet34') else 512
         super().__init__(backbone, train_backbone, num_channels, return_interm_layers)
 
