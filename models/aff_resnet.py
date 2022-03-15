@@ -269,7 +269,7 @@ def resnet34(fuse_type='DAF', **kwargs):
     return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], fuse_type, **kwargs)
 
 
-def resnet50(fuse_type='DAF', small_input=False, **kwargs):
+def resnet50(fuse_type='AFF', small_input=False, **kwargs):
     r"""ResNet-50 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
