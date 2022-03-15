@@ -80,16 +80,18 @@ class BackboneBase(nn.Module):
         return out
 
 
+        
 class Backbone(BackboneBase):
     """ResNet backbone with frozen BatchNorm."""
     def __init__(self, name: str,
                  train_backbone: bool,
                  return_interm_layers: bool,
                  dilation: bool):
-        backbone = resnet18()
-        num_channels = 2048
+        backbone = resnet50(
+            replace_stride_with_dilation=[False, False, dilation],
+            pretrained=is_main_process(), norm_layer=FrozenBatchNorm2d)
+        num_channels = 512 if name in ('resnet18', 'resnet34') else 2048
         super().__init__(backbone, train_backbone, num_channels, return_interm_layers)
-
         
         
 class Joiner(nn.Sequential):
