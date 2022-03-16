@@ -141,10 +141,10 @@ class TransformerEncoderLayer(nn.Module):
         self.dropout2 = nn.Dropout(dropout)         
         self.local_att = nn.Sequential(
             nn.Linear(dim_feedforward, d_model),
-            nn.BatchNorm2d(128),
+            nn.BatchNorm1d(512),
             nn.ReLU(inplace=False),
             nn.Linear(dim_feedforward, d_model),
-            nn.BatchNorm2d(512),
+            nn.BatchNorm1d(512),
         )
 
         self.activation = _get_activation_fn(activation)
