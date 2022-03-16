@@ -28,11 +28,11 @@ class Transformer(nn.Module):
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
         self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
         self.local_att = nn.Sequential(
-            nn.Conv1d(1024, 256, kernel_size=1, stride=1, padding=0),
-            nn.LayerNorm(256),
+            nn.Conv1d(8, 2, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(2),
             nn.ReLU(inplace=False),
-            nn.Conv1d(256, 1024, kernel_size=1, stride=1, padding=0),
-            nn.LayerNorm(1024),
+            nn.Conv1d(8, 2, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(8),
         )
         
 
