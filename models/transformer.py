@@ -147,11 +147,11 @@ class TransformerEncoderLayer(nn.Module):
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
         self.local_att = nn.Sequential(
-            nn.Conv2d(channels, inter_channels, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(inter_channels),
+            nn.Conv2d(512, 128, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(128),
             nn.ReLU(inplace=False),
-            nn.Conv2d(inter_channels, channels, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(channels),
+            nn.Conv2d(128, 512, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(512),
         )      
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
