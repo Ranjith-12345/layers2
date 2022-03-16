@@ -32,7 +32,7 @@ class Transformer(nn.Module):
             nn.LayerNorm(2),
             nn.ReLU(inplace=False),
             nn.Conv1d(8, 2, kernel_size=1, stride=1, padding=0),
-            nn.LayerNorm(2),
+            nn.LayerNorm(2).unsqueeze(dim=2),
         )
         
 
