@@ -26,7 +26,7 @@ class Transformer(nn.Module):
         encoder_layer = TransformerEncoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
-        self.x = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
+        self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
         self.local_att = nn.Sequential(
             nn.Conv1d(512, 128, kernel_size=1, stride=1, padding=0),
             nn.LayerNorm(128),
