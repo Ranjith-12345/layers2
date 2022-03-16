@@ -126,9 +126,9 @@ class TransformerDecoder(nn.Module):
 
 class TransformerEncoderLayer(nn.Module):
 
-    def __init__(self, d_model, nhead,r=4, dim_feedforward=2048, dropout=0.1,
+    def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False):
-        inter_channels = int(d_model // r)
+        inter_channels = 128
         super().__init__()
         self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout)
         self.local_att = nn.Sequential(
