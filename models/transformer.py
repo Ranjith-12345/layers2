@@ -1,7 +1,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 """
 DETR Transformer class.
-
 Copy-paste from torch.nn.Transformer with modifications:
     * positional encodings are passed in MHattention
     * extra LN at the end of encoder is removed
@@ -13,7 +12,7 @@ from typing import Optional, List
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
-from .fusion import *
+
 
 class Transformer(nn.Module):
 
@@ -128,31 +127,13 @@ class TransformerEncoderLayer(nn.Module):
 
     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False):
-        inter_channels = 128
         super().__init__()
         self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout)
-        self.local_att = nn.Sequential(
-            nn.Conv2d(d_model, inter_channels, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(inter_channels),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(inter_channels, d_model, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(d_model)
-        )
-
-        self.global_att = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(d_model, inter_channels, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(inter_channels),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(inter_channels, d_model, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(d_model)
-        )
         # Implementation of Feedforward model
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)
-        self.conv1 = nn.Conv2d(d_model, dim_feedforward, kernel_size=1, stride=1, padding=0)
-        self.conv2 = nn.Conv2d(d_model, dim_feedforward, kernel_size=1, stride=1, padding=0)
+
         self.norm1 = nn.LayerNorm(d_model)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
