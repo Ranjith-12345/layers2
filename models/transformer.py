@@ -34,7 +34,7 @@ class Transformer(nn.Module):
             nn.Conv1d(128, 512, kernel_size=1, stride=1, padding=0),
             nn.LayerNorm(512),
         )
-        self.encoder = local_att(x)
+        
 
         decoder_layer = TransformerDecoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
@@ -62,6 +62,7 @@ class Transformer(nn.Module):
 
         tgt = torch.zeros_like(query_embed)
         memory = self.encoder(src, src_key_padding_mask=mask, pos=pos_embed)
+        memory = local_att(memory)
         hs = self.decoder(tgt, memory, memory_key_padding_mask=mask,
                           pos=pos_embed, query_pos=query_embed)
         return hs.transpose(1, 2), memory.permute(1, 2, 0).view(bs, c, h, w)
