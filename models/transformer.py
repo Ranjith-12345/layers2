@@ -27,13 +27,13 @@ class Transformer(nn.Module):
                                                 dropout, activation, normalize_before)
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
         self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
-        '''self.local_att = nn.Sequential(
-            nn.Conv1d(512, 128, kernel_size=1, stride=1, padding=0),
-            nn.LayerNorm(128),
+        self.local_att = nn.Sequential(
+            nn.Conv1d(1024, 256, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(256),
             nn.ReLU(inplace=False),
-            nn.Conv1d(128, 512, kernel_size=1, stride=1, padding=0),
-            nn.LayerNorm(512),
-        )'''
+            nn.Conv1d(256, 1024, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(1024),
+        )
         
 
         decoder_layer = TransformerDecoderLayer(d_model, nhead, dim_feedforward,
@@ -62,8 +62,8 @@ class Transformer(nn.Module):
 
         tgt = torch.zeros_like(query_embed)
         memory = self.encoder(src, src_key_padding_mask=mask, pos=pos_embed)
-        print(memory)
-        #memory = self.local_att(memory)
+        #print(memory)
+        memory = self.local_att(memory)
         hs = self.decoder(tgt, memory, memory_key_padding_mask=mask,
                           pos=pos_embed, query_pos=query_embed)
         return hs.transpose(1, 2), memory.permute(1, 2, 0).view(bs, c, h, w)
