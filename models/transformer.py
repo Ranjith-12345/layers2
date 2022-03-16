@@ -26,6 +26,13 @@ class Transformer(nn.Module):
                                                 dropout, activation, normalize_before)
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
         self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
+        self.local_att = nn.Sequential(
+            nn.Conv2d(512, 128, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=False),
+            nn.Conv2d(128, 512, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(512),
+        )
 
         decoder_layer = TransformerDecoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
