@@ -26,7 +26,15 @@ class Transformer(nn.Module):
         encoder_layer = TransformerEncoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
-        self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
+        self.x = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
+        self.local_att = nn.Sequential(
+            nn.Conv1d(512, 128, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(128),
+            nn.ReLU(inplace=False),
+            nn.Conv1d(128, 512, kernel_size=1, stride=1, padding=0),
+            nn.LayerNorm(512),
+        )
+        self.encoder = local_att(x)
 
         decoder_layer = TransformerDecoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
@@ -138,14 +146,7 @@ class TransformerEncoderLayer(nn.Module):
         self.norm1 = nn.LayerNorm(d_model)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)         
-        self.local_att = nn.Sequential(
-            nn.Linear(dim_feedforward, d_model),
-            nn.BatchNorm1d(512),
-            nn.ReLU(inplace=False),
-            nn.Linear(dim_feedforward, d_model),
-            nn.BatchNorm1d(512),
-        )
+        self.dropout2 = nn.Dropout(dropout)
 
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
@@ -166,7 +167,6 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
         src = src + self.dropout2(src2)
         src = self.norm2(src)
-        src = src + self.local_att(src)
         return src
 
     def forward_pre(self, src,
@@ -181,8 +181,6 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.norm2(src)
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src2))))
         src = src + self.dropout2(src2)
-        src = src + self.local_att(src)
-         
         return src
 
     def forward(self, src,
