@@ -144,7 +144,7 @@ class TransformerEncoderLayer(nn.Module):
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=False),
             nn.Linear(dim_feedforward, d_model),
-            nn.BatchNorm2d(channels),
+            nn.BatchNorm2d(512),
         )
 
         self.activation = _get_activation_fn(activation)
