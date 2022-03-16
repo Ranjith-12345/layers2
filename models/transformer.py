@@ -138,7 +138,14 @@ class TransformerEncoderLayer(nn.Module):
         self.norm1 = nn.LayerNorm(d_model)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)         
+        self.local_att = nn.Sequential(
+            nn.Linear(dim_feedforward, d_model),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=False),
+            nn.Linear(dim_feedforward, d_model),
+            nn.BatchNorm2d(channels),
+        )
 
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
@@ -159,6 +166,7 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
         src = src + self.dropout2(src2)
         src = self.norm2(src)
+        src = src + self.local_att(src)
         return src
 
     def forward_pre(self, src,
@@ -173,6 +181,8 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.norm2(src)
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src2))))
         src = src + self.dropout2(src2)
+        src = src + self.local_att(src)
+         
         return src
 
     def forward(self, src,
