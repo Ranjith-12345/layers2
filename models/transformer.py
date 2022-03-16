@@ -1,6 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 """
 DETR Transformer class.
+
 Copy-paste from torch.nn.Transformer with modifications:
     * positional encodings are passed in MHattention
     * extra LN at the end of encoder is removed
@@ -26,14 +27,6 @@ class Transformer(nn.Module):
                                                 dropout, activation, normalize_before)
         encoder_norm = nn.LayerNorm(d_model) if normalize_before else None
         self.encoder = TransformerEncoder(encoder_layer, num_encoder_layers, encoder_norm)
-         
-        '''self.local_att = nn.Sequential(
-            nn.Conv2d(512, 128, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(128, 512, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(512),
-        )'''
 
         decoder_layer = TransformerDecoderLayer(d_model, nhead, dim_feedforward,
                                                 dropout, activation, normalize_before)
@@ -146,13 +139,7 @@ class TransformerEncoderLayer(nn.Module):
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
-        self.local_att = nn.Sequential(
-            nn.Conv2d(512, 128, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(128, 512, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(512),
-        )      
+
         self.activation = _get_activation_fn(activation)
         self.normalize_before = normalize_before
 
@@ -172,7 +159,6 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
         src = src + self.dropout2(src2)
         src = self.norm2(src)
-        src = self.local_att(src)
         return src
 
     def forward_pre(self, src,
@@ -187,7 +173,6 @@ class TransformerEncoderLayer(nn.Module):
         src2 = self.norm2(src)
         src2 = self.linear2(self.dropout(self.activation(self.linear1(src2))))
         src = src + self.dropout2(src2)
-        src = self.local_att(src)
         return src
 
     def forward(self, src,
